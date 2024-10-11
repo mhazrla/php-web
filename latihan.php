@@ -24,6 +24,9 @@ $students = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latihan</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
     <style>
         .square {
             padding: 10px;
@@ -53,6 +56,21 @@ $students = [
             transform: rotate(360deg);
             border-radius: 50%;
         }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: greenyellow;
+            color: blue;
+        }
     </style>
 </head>
 
@@ -75,11 +93,12 @@ $students = [
     <hr />
     <h1>Daftar Siswa</h1>
 
-    <table>
+    <table border="1">
         <thead>
             <tr>
                 <th>NAMA</th>
                 <th>NISN</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -87,6 +106,11 @@ $students = [
                 <tr>
                     <td><?= $siswa["nama"] ?></td>
                     <td><?= $siswa["NISN"] ?></td>
+                    <td>
+                        <a href="latihan2.php?nama=<?= $siswa["nama"] ?>&nisn=<?= $siswa["NISN"] ?>">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
