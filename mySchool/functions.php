@@ -64,10 +64,15 @@ function update($data)
     $class = htmlspecialchars($data["class"]);
     $oldImage = htmlspecialchars($data['old_image']);
 
-    if ($_FILES['image']['error'] === 4) {
+    if ($_FILES['gambar']['error'] === 4) {
         $image = $oldImage;
     } else {
         $image = upload();
+        if (!$image) {
+            return false;
+        }
+
+        unlink('./img/' . $oldImage);
     }
 
     $query = "UPDATE students SET
@@ -77,7 +82,7 @@ function update($data)
 				class_id = '$class',
 				major_id = '$major',
                 image = '$image'
-			  WHERE nisn = $nisn
+			  WHERE nisn = '$nisn'
 			";
     mysqli_query($connection, $query);
     return mysqli_affected_rows($connection);
@@ -231,8 +236,12 @@ function upload()
         return false;
     }
 
+    $imgFolder = 'img/';
+    if (!is_dir($imgFolder)) {
+        mkdir($imgFolder, 0755, true);
+    }
     $newFilename = uniqid() . '.' . $ekstensiGambar;
-    move_uploaded_file($tmpName, 'img/' . $newFilename);
+    move_uploaded_file($tmpName, $imgFolder . $newFilename);
 
     return $newFilename;
 }

@@ -108,7 +108,7 @@ $classes = query("SELECT * FROM classes");
                                 </button>
                             </div>
                             <!-- Modal body -->
-                            <form class="p-4 md:p-5" action="" method="post">
+                            <form class="p-4 md:p-5" action="" method="post" enctype="multipart/form-data">
                                 <div class="grid gap-4 mb-4 grid-cols-3">
                                     <div class="col-span-1">
                                         <label for="nisn" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NISN</label>
@@ -158,7 +158,10 @@ $classes = query("SELECT * FROM classes");
                                         <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
                                         <textarea name="alamat" id="alamat" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"></textarea>
                                         <span class="text-red-500 text-sm">*</span>
-
+                                    </div>
+                                    <div class="col-span-3">
+                                        <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
+                                        <input type="file" name="gambar" class="text-white border border-gray-300 w-full">
                                     </div>
                                 </div>
                                 <button name="submit" type="submit" class="w-full justify-center text-white inline-flex items-center  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -212,8 +215,10 @@ $classes = query("SELECT * FROM classes");
                     <?php foreach ($students as $student) : ?>
                         <!-- Edit modal -->
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                <?= $student["image"] ?>
+                            <th scope="row" class="py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <div class="flex justify-center">
+                                    <img src="./img/<?= $student['image'] ?>" alt="" class="rounded w-1/2">
+                                </div>
                             </th>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 <?= $student["nisn"] ?>
@@ -252,7 +257,7 @@ $classes = query("SELECT * FROM classes");
                                                 </button>
                                             </div>
                                             <!-- Modal body -->
-                                            <form id="edit-form-<?= $student['nisn'] ?>" class="p-4 md:p-5" action="" method="post">
+                                            <form id="edit-form-<?= $student['nisn'] ?>" class="p-4 md:p-5" action="" method="post" enctype="multipart/form-data">
                                                 <div class="grid gap-4 mb-4 grid-cols-3">
                                                     <div class="col-span-1">
                                                         <label for="nisn" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NISN</label>
@@ -302,6 +307,12 @@ $classes = query("SELECT * FROM classes");
                                                         <textarea name="alamat" id="alamat" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write product description here"><?= $student['alamat'] ?></textarea>
                                                         <span class="text-red-500 text-sm">*</span>
 
+                                                    </div>
+                                                    <div class="col-span-3">
+                                                        <input type="hidden" name="old_image" value="<?= $student['image'] ?>">
+                                                        <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image</label>
+                                                        <img src="./img/<?= $student['image'] ?>" alt="" class="rounded w-1/4 mb-4">
+                                                        <input type="file" name="gambar" class="text-white border border-gray-300 w-full">
                                                     </div>
                                                 </div>
                                                 <button name="update" type="submit" class="w-full justify-center text-white inline-flex items-center  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
