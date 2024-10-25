@@ -31,15 +31,21 @@ function tambah($data)
     $major = htmlspecialchars($data["major"]);
     $class = htmlspecialchars($data["class"]);
 
-    $checkNISN = query("SELECT * FROM students WHERE nisn=$nisn");
+    $checkNISN = query("SELECT * FROM students WHERE nisn='$nisn'");
 
     if (count($checkNISN) > 0) {
         return -1;
     }
 
+    // upload gambar
+    $image = upload();
+    if (!$image) {
+        return false;
+    }
+
     $query = "INSERT 
     INTO students 
-    VALUES('$nisn', '$name', '$alamat', '$umur', '$class', '$major')";
+    VALUES('$nisn', '$name', '$alamat', '$umur', '$class', '$major', '$image')";
 
     $insert = mysqli_query($connection, $query);
     $result = mysqli_affected_rows($connection);
@@ -56,13 +62,21 @@ function update($data)
     $alamat = htmlspecialchars($data["alamat"]);
     $major = htmlspecialchars($data["major"]);
     $class = htmlspecialchars($data["class"]);
+    $oldImage = htmlspecialchars($data['old_image']);
+
+    if ($_FILES['image']['error'] === 4) {
+        $image = $oldImage;
+    } else {
+        $image = upload();
+    }
 
     $query = "UPDATE students SET
 				name = '$name',
 				alamat = '$alamat',
 				umur = '$umur',
 				class_id = '$class',
-				major_id = '$major'
+				major_id = '$major',
+                image = '$image'
 			  WHERE nisn = $nisn
 			";
     mysqli_query($connection, $query);
@@ -181,4 +195,44 @@ function handleFormSubmit($data, $action)
         });
         </script>";
     }
+}
+
+
+function upload()
+{
+    $originalName = $_FILES['gambar']['name'];
+    $filesize = $_FILES['gambar']['size'];
+    $error = $_FILES['gambar']['error'];
+    $tmpName = $_FILES['gambar']['tmp_name'];
+
+    if (
+        $error === 4
+    ) {
+        echo "<script>
+				alert('pilih gambar terlebih dahulu!');
+			  </script>";
+        return false;
+    }
+
+    $validExtension = ['jpg', 'jpeg', 'png'];
+    $ekstensiGambar = explode('.', $originalName);
+    $ekstensiGambar = strtolower(end($ekstensiGambar));
+    if (!in_array($ekstensiGambar, $validExtension)) {
+        echo "<script>
+				alert('File bukan gambar');
+			  </script>";
+        return false;
+    }
+
+    if ($filesize > 1000000) {
+        echo "<script>
+				alert('Ukuran gambar terlalu besar!');
+			  </script>";
+        return false;
+    }
+
+    $newFilename = uniqid() . '.' . $ekstensiGambar;
+    move_uploaded_file($tmpName, 'img/' . $newFilename);
+
+    return $newFilename;
 }
